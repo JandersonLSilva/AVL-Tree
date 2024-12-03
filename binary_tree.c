@@ -8,6 +8,10 @@ typedef struct TreeNode {
   int b;
 }TreeNode;
 
+TreeNode* createNode(TreeNode *tree, int value);
+TreeNode* freeNode(TreeNode *tree);
+TreeNode* insertValue(TreeNode *tree, int value);
+
 int main(){
   int opt;
   TreeNode *tree;
@@ -20,15 +24,55 @@ int main(){
     scanf("%d", &opt);
 
     if(opt == 0){
-      printf("Bal = XX\n");
-      printf("Resetando arvore");
+      if(tree == NULL) printf("A arvore ja esta vazia\n");
+      else{
+        printf("Bal = %d\n", tree->b);
+        printf("Resetando arvore\n");
+        tree = freeNode(tree);
+      }
     }else if(opt == -1){
       break;
     }else{
-      printf("else");
+      tree = insertValue(tree, opt);
     }
   }
 
   printf("FIM");
   return 0;
+}
+
+TreeNode* createNode(TreeNode *tree, int value){
+  tree = (TreeNode*)malloc(sizeof(TreeNode));
+  tree->value = value;
+  tree->rNode = NULL;
+  tree->lNode = NULL;
+  tree->b = 0;
+
+  return tree;
+}
+
+TreeNode* freeNode(TreeNode *tree){
+  printf("Limpando %d - ", tree->value);
+  if(tree->rNode != NULL) freeNode(tree->rNode);
+  if(tree->lNode != NULL) freeNode(tree->lNode);
+  printf("\n");
+  free(tree);
+  return NULL;
+}
+
+TreeNode* insertValue(TreeNode *tree, int value){
+  if(tree == NULL){
+    tree = createNode(tree, value);
+  }else{
+      if(value > tree->value){
+        tree->rNode = insertValue(tree->rNode, value);
+        //colocar rotações - balanceamento
+        tree->b++;
+      }else if(value < tree->value){
+        tree->lNode = insertValue(tree->lNode, value);
+        tree->b--;
+      }
+  }
+  printf("Bal - %d = %d\n", tree->value, tree->b);
+  return tree;
 }
