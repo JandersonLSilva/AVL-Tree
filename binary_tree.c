@@ -8,7 +8,7 @@ typedef struct TreeNode {
   int b;
 }TreeNode;
 
-TreeNode* createNode(TreeNode *tree, int value);
+TreeNode* createNode(int value);
 TreeNode* freeNode(TreeNode *tree);
 TreeNode* insertValue(TreeNode *tree, int value);
 
@@ -41,8 +41,8 @@ int main(){
   return 0;
 }
 
-TreeNode* createNode(TreeNode *tree, int value){
-  tree = (TreeNode*)malloc(sizeof(TreeNode));
+TreeNode* createNode(int value){
+  TreeNode *tree = (TreeNode*)malloc(sizeof(TreeNode));
   tree->value = value;
   tree->rNode = NULL;
   tree->lNode = NULL;
@@ -62,7 +62,7 @@ TreeNode* freeNode(TreeNode *tree){
 
 TreeNode* insertValue(TreeNode *tree, int value){
   if(tree == NULL){
-    tree = createNode(tree, value);
+    tree = createNode(value);
   }else{
       if(value > tree->value){
         tree->rNode = insertValue(tree->rNode, value);
